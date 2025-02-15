@@ -4,10 +4,10 @@
 // session_name($session_name);
 // echo "<script>alert('$session_name');</script>";
 session_start();
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 $check = "";
-if(isset($_SESSION['username'])){
-$check = $_SESSION['username'];
+if (isset($_SESSION['username'])) {
+    $check = $_SESSION['username'];
 }
 if (isset($_REQUEST['submit'])) {
     $username = $_REQUEST['username'];
@@ -187,19 +187,19 @@ if (isset($_POST['submit'])) {
             justify-content: center;
         }
 
-        @media screen and (max-width: 450px){
+        @media screen and (max-width: 450px) {
 
 
-            .box{
+            .box {
                 padding: 10px;
             }
 
             .links {
-            display: flex;
-            position: relative;
-            justify-content: space-between;
-            top: -10px;
-        }
+                display: flex;
+                position: relative;
+                justify-content: space-between;
+                top: -10px;
+            }
         }
     </style>
 </head>
