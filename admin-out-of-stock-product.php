@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['admin'])) {
-  $con = mysqli_connect("localhost", "root", "", "optical");
+  $con = mysqli_connect("localhost", "root", "root", "optical");
   error_reporting(E_ALL);
 } else {
   echo '<script>location.href = "login.php";</script>';

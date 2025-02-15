@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['admin'])) {
-  $con = mysqli_connect("localhost", "root", "", "optical");
+  $con = mysqli_connect("localhost", "root", "root", "optical");
 } else {
   echo '<script>location.href = "login.php";</script>';
 }
@@ -199,7 +199,7 @@ if (isset($_SESSION['admin'])) {
     </div>
     <script src="bootstrap.min.js"></script>
     <?php
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
     if (isset($_POST['submit'])) {
         $product_name = $_POST['product_name'];
         $product_price = $_POST['product_price'];

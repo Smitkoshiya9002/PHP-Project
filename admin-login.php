@@ -134,7 +134,7 @@
     </form>
 </body>
 <?php
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 
 if (isset($_REQUEST['submit'])) {
     $username = $_REQUEST['username'];

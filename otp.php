@@ -152,7 +152,7 @@ session_start();
 <?php
 
 
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 
 
 // $otp = $_POST['otp'];

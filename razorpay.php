@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
     $uname = $_SESSION['username'];
     $order_id = $_SESSION['order_id'];
     $api_key = "rzp_test_lPJcw5eOhf3stK"; 

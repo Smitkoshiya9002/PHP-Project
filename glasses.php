@@ -323,7 +323,7 @@ session_start();
 
     <section id="product">
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product"; 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['glasses'] = $_POST['glasses'];

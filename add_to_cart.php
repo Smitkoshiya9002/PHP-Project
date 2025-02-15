@@ -11,25 +11,15 @@ if (isset($_SESSION['username'])) {
         $productid = $_GET['product_id'];
 
         // $insert = "INSERT INTO `tbl_add_to_cart`(`product_id`) VALUES ('$productid')";
-
-        $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid'";
+        $customer_name = $_SESSION['username'];
+        $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid' where `customer_name` = $customer_name";
         $result = mysqli_query($con, $query);
 
         if (mysqli_num_rows($result) == 0) {
-            $insert = "INSERT INTO `tbl_add_to_cart` (`product_name`,`product_prize`, `product_photo`, `product_company`, `product_size`,`product_category`,`product_id`)
-            SELECT `product_name` , `prize` , `photo` , `company` , `size`, `category` , `product_id`
-            FROM `tbl_category_product` where `product_id` = '$productid';";
-
+            $insert = "INSERT INTO tbl_add_to_cart (product_name, product_prize, product_photo, product_company, product_size, product_category, product_id, customer_name, product_quantity, total_prize)
+                       SELECT product_name, prize, photo, company, size, category, product_id, '$customer_name', 1, prize
+                       FROM tbl_category_product WHERE product_id = '$productid'";
             if (mysqli_query($con, $insert)) {
-
-                $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid'";
-                $result = mysqli_query($con, $query);
-                $row = mysqli_fetch_assoc($result);
-
-                $customer_name = $_SESSION['username'];
-                $insert = "update `tbl_add_to_cart` set `customer_name` = '$customer_name',`product_quantity`=1,`total_prize` = $row[product_prize] where `product_id` = '$productid';";
-                mysqli_query($con, $insert);
-                echo '<script>alert("insert data successfully");</script>';
                 echo '<script>location.href = "add_to_cart.php";</script>';
             } else {
                 echo '<script>alert("error to insert query");</script>';
@@ -380,7 +370,7 @@ if (isset($_SESSION['username'])) {
         <div class="container">
             <form action="" method="post">
                 <?php
-                $con = mysqli_connect("localhost", "root", "", "optical");
+                $con = mysqli_connect("localhost", "root", "root", "optical");
                 $customer_name = $_SESSION['username'];
 
                 $select = "select * from `tbl_add_to_cart` where `customer_name` = '$customer_name'";

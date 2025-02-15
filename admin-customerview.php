@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['admin'])) {
-  $con = mysqli_connect("localhost", "root", "", "optical");
+  $con = mysqli_connect("localhost", "root", "root", "optical");
 } else {
   echo '<script>location.href = "login.php";</script>';
 }
@@ -157,7 +157,7 @@ if (isset($_POST['delete_name'])) {
             <br>
             <div class="col-sm-9">
                 <?php
-                $con = mysqli_connect("localhost", "root", "", "optical");
+                $con = mysqli_connect("localhost", "root", "root", "optical");
                 $query = "SELECT * FROM tbl_customer_details";
                 $result = mysqli_query($con, $query);
 

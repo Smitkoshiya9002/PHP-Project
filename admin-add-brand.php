@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['admin'])) {
-  $con = mysqli_connect("localhost", "root", "", "optical");
+  $con = mysqli_connect("localhost", "root", "root", "optical");
   error_reporting(E_ALL);
 } else {
   echo '<script>location.href = "login.php";</script>';
@@ -145,7 +145,7 @@ if (isset($_SESSION['admin'])) {
             <div class="col-sm-9">
                 <form action="" method="post" enctype="multipart/form-data">
                     <?php
-                    $con = mysqli_connect("localhost", "root", "", "optical");
+                    $con = mysqli_connect("localhost", "root", "root", "optical");
 
                     $brand = "select * from `tbl_brand`";
                     $result = mysqli_query($con, $brand);
@@ -173,9 +173,9 @@ if (isset($_SESSION['admin'])) {
     </div>
     <script src="bootstrap.min.js"></script>
     <?php
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
     if (isset($_POST['Add'])) {
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $brand = $_POST['Brand_name'];
         $check = "select * from `tbl_brand` where `brand_name` = '$brand'"; 
         $result = mysqli_query($con, $check);
@@ -195,9 +195,9 @@ if (isset($_SESSION['admin'])) {
     ?>
 
 <?php
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
     if (isset($_POST['Delete'])) {
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $brand = $_POST['Brand_name'];
         $check = "select * from `tbl_brand` where `brand_name` = '$brand'"; 
         $result = mysqli_query($con, $check);

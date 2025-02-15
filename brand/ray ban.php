@@ -469,7 +469,7 @@ session_start();
     <section id="product" class="reveal">
 
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where company='ray ban' and category = 'all'";
         $result = mysqli_query($con, $query);
 

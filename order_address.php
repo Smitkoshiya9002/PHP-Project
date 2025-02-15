@@ -1,6 +1,6 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 $username = $_SESSION['username'];
 ?>
 <!DOCTYPE html>

@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST['product_name'])) {
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
 
     $product_name = mysqli_real_escape_string($con, $_POST['product_name']);
 

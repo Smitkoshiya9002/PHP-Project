@@ -1,5 +1,5 @@
 <?php
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 session_start();
 
 if (isset($_POST['submit'])) {

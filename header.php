@@ -140,11 +140,10 @@
       border: none;
     }
 
-    .login-space{
+    .login-space {
       position: relative;
       left: 450%;
     }
-
   </style>
 </head>
 
@@ -152,12 +151,12 @@
   <div class="nav">
     <nav id="nav">
       <ul>
-      <!-- <li class="menu-icon">&#9776;</li> -->
+        <!-- <li class="menu-icon">&#9776;</li> -->
         <li><a href="/smit/home.php">Home</a></li>
         <li><a href="/smit/home.php/#brandsection">Brand</a>
           <ul>
             <?php
-            $con = mysqli_connect("localhost", "root", "", "optical");
+            $con = mysqli_connect("localhost", "root", "root", "optical");
             $brand = "select * from `tbl_brand`";
             $result = mysqli_query($con, $brand);
             while ($row = mysqli_fetch_assoc($result)) {
@@ -169,7 +168,7 @@
         <li><a href="/smit/home.php#categorysection">Category</a>
           <ul>
             <?php
-            $con = mysqli_connect("localhost", "root", "", "optical");
+            $con = mysqli_connect("localhost", "root", "root", "optical");
             $category = "select * from `tbl_category`";
             $result = mysqli_query($con, $category);
             while ($row = mysqli_fetch_assoc($result)) {
@@ -197,7 +196,7 @@
         <li><a href="/smit/#contact-form">Contact us</a></li>
         <?php
         if (isset($_SESSION['username'])) {
-          $con = mysqli_connect("localhost", "root", "", "optical");
+          $con = mysqli_connect("localhost", "root", "root", "optical");
           $select_rows = mysqli_query($con, "select * from tbl_add_to_cart");
           $row_count = mysqli_num_rows($select_rows);
           echo '<li><a href="/smit/my_order.php" class="order">Order</a></li>

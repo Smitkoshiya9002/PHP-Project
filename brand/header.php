@@ -118,14 +118,14 @@
         <li><a href="#categorysection">Category</a>
           <ul>
             <?php
-            $con = mysqli_connect("localhost", "root", "", "optical");
+            $con = mysqli_connect("localhost", "root", "root", "optical");
 
             $category = "select * from `tbl_category`";
             $result = mysqli_query($con, $category);
 
             while ($row = mysqli_fetch_assoc($result)) {
             ?>
-              <li><a href="/smit/<?php echo $row['category_name']?>.php"><?php echo $row['category_name'] ?></a></li>
+              <li><a href="/smit/<?php echo $row['category_name'] ?>.php"><?php echo $row['category_name'] ?></a></li>
             <?php
             }
             ?>

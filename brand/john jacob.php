@@ -437,7 +437,7 @@ session_start();
     <section id="product" class="reveal">
         <h3>Bestseller Sunglasses</h3>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'all' and `company` = 'john jacob'";
         $result = mysqli_query($con, $query);
 
@@ -497,7 +497,7 @@ session_start();
     <section id="men" class="reveal">
         <h3>Men Sunglasses</h3>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'men' and `company` = 'john jacob'";
         $result = mysqli_query($con, $query);
 
@@ -557,7 +557,7 @@ session_start();
     <section id="women" class="reveal">
         <h3>woMen Sunglasses</h3>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'women' and `company` = 'john jacob'";
         $result = mysqli_query($con, $query);
 
@@ -619,7 +619,7 @@ session_start();
             <h3>Kids sunglasses</h3>
         </div>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'kids' and `company` = 'john jacob'";
         $result = mysqli_query($con, $query);
 

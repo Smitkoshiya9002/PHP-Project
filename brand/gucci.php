@@ -475,7 +475,7 @@ session_start();
             <!-- <h3>sunglasses</h3> -->
         </div>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM `tbl_category_product` where `company` = 'Gucci'";
         $result = mysqli_query($con, $query);
 

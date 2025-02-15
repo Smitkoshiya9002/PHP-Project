@@ -16,7 +16,7 @@
 <?php
 session_start();
 $method = $_SESSION['payment_method'];
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 $order_id = $_SESSION['order_id'];
 
 $update = "UPDATE `tbl_order` SET `status`='complete' WHERE `OID` = '$order_id'";

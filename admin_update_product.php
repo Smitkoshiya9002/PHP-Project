@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['admin'])) {
-  $con = mysqli_connect("localhost", "root", "", "optical");
+  $con = mysqli_connect("localhost", "root", "root", "optical");
   error_reporting(E_ALL);
 } else {
   echo '<script>location.href = "login.php";</script>';
@@ -188,7 +188,7 @@ if (isset($_SESSION['admin'])) {
 
             <div class="col-sm-9">
                 <?php
-                $con = mysqli_connect("localhost", "root", "", "optical");
+                $con = mysqli_connect("localhost", "root", "root", "optical");
                 ?>
 
                 <form action="" method="post">
@@ -292,7 +292,7 @@ if (isset($_SESSION['admin'])) {
                                 <select name="new_company" id="searchbrand" class="usid drop-down">
                                     <option value="<?php echo $row['company'] ?>"><?php echo $row['company'] ?></option>
                                     <?php
-                                    $con = mysqli_connect("localhost", "root", "", "optical");
+                                    $con = mysqli_connect("localhost", "root", "root", "optical");
                                     $brandfind = "SELECT DISTINCT brand_name FROM tbl_brand";
                                     $brandresult = mysqli_query($con, $brandfind);
                                     while ($rowbrand = mysqli_fetch_assoc($brandresult)) {
@@ -305,7 +305,7 @@ if (isset($_SESSION['admin'])) {
                                 <select name="new_category" id="searchcategory" class="usid drop-down">
                                     <option value="<?php echo $row['category'] ?> "><?php echo $row['category'] ?></option>
                                     <?php
-                                    $con = mysqli_connect("localhost", "root", "", "optical");
+                                    $con = mysqli_connect("localhost", "root", "root", "optical");
                                     $brandfind = "SELECT DISTINCT category_name FROM tbl_category";
                                     $brandresult = mysqli_query($con, $brandfind);
                                     while ($rowcategory = mysqli_fetch_assoc($brandresult)) {

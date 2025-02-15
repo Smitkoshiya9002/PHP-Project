@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['username'])) {
-$con = mysqli_connect("localhost", "root", "", "optical");
+$con = mysqli_connect("localhost", "root", "root", "optical");
 ?>
 
 <?php
@@ -262,7 +262,7 @@ if (isset($_POST['submit'])) {
       <div class="col-sm-9">
         <?php
         $username = $_SESSION['username'];
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_customer_details where name='$username'";
         $result = mysqli_query($con, $query);
 

@@ -157,7 +157,7 @@ session_start();
         <input type="submit" value="submit" name="submit" class="button">
     </form>
     <?php
-    $con = mysqli_connect("localhost", "root", "", "optical");
+    $con = mysqli_connect("localhost", "root", "root", "optical");
     if (isset($_POST['submit'])) {
         //name validation
         if (empty($_POST["name"])) {
