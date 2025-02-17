@@ -1,10 +1,6 @@
 <?php
-// if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-//   echo '<script>alert("You are already logged in");</script>';
-//   exit;
-// }else{
-//   echo '<script>alert("no found");</script>';
-// }
+include 'Backend/db.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -156,11 +152,10 @@
         <li><a href="/smit/home.php/#brandsection">Brand</a>
           <ul>
             <?php
-            $con = mysqli_connect("localhost", "root", "root", "optical");
-            $brand = "select * from `tbl_brand`";
-            $result = mysqli_query($con, $brand);
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo '<li><a href="/smit/brand/' . $row['brand_name'] . '.php">' . $row['brand_name'] . '</a></li>';
+            $row = getHeaderData($pdo, "tbl_brand");
+
+            foreach ($row as $r) {
+              echo '<li><a href="/smit/brand/' . $r['brand_name'] . '.php">' . $r['brand_name'] . '</a></li>';
             }
             ?>
           </ul>
@@ -168,11 +163,9 @@
         <li><a href="/smit/home.php#categorysection">Category</a>
           <ul>
             <?php
-            $con = mysqli_connect("localhost", "root", "root", "optical");
-            $category = "select * from `tbl_category`";
-            $result = mysqli_query($con, $category);
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo '<li><a href="/smit/category.php?category=' . $row['category_name'] . '">' . $row['category_name'] . '</a></li>';
+            $row = getHeaderData($pdo, "tbl_category");
+            foreach ($row as $r) {
+              echo '<li><a href="/smit/category.php?category=' . $r['category_name'] . '.php">' . $r['category_name'] . '</a></li>';
             }
             ?>
           </ul>
@@ -196,9 +189,10 @@
         <li><a href="/smit/#contact-form">Contact us</a></li>
         <?php
         if (isset($_SESSION['username'])) {
-          $con = mysqli_connect("localhost", "root", "root", "optical");
-          $select_rows = mysqli_query($con, "select * from tbl_add_to_cart");
-          $row_count = mysqli_num_rows($select_rows);
+          $stmt = $pdo->prepare("SELECT * FROM `tbl_add_to_cart` WHERE `customer_name` = :a");
+          $stmt->bindParam((':a'), $_SESSION['username']);
+          $stmt->execute();
+          $row_count = $stmt->rowCount();
           echo '<li><a href="/smit/my_order.php" class="order">Order</a></li>
                 <a href="/smit/add_to_cart.php" class="cart-icon"><i class="glyphicon glyphicon-shopping-cart"></i><span>' . $row_count . '</span></a>';
           echo '<li><a href="/smit/customer_panel.php" class="login-space">My Profile</a></li>';

@@ -1,14 +1,12 @@
 <?php
-// $session_token = md5(uniqid(rand(), true));
-// $session_name = "your_session_name_" . $session_token;
-// session_name($session_name);
-// echo "<script>alert('$session_name');</script>";
+include "Backend/db.php";
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "optical");
+
 $check = "";
 if (isset($_SESSION['username'])) {
     $check = $_SESSION['username'];
 }
+
 if (isset($_REQUEST['submit'])) {
     $username = $_REQUEST['username'];
     $password = $_REQUEST['password'];
@@ -17,38 +15,8 @@ if (isset($_REQUEST['submit'])) {
         echo "<script>alert('already login!')</script>";
         echo "<script>location.href = '/smit/login.php';</script>";
     } else {
-
-        $query = "select * from tbl_admin";
-        $result = mysqli_query($con, $query);
-
-        $row = mysqli_fetch_assoc($result);
-        $admin_email = $row['email'];
-        $admin_pass = $row['password'];
-
-        if (($username == $admin_email) && ($password == $admin_pass)) {
-            $_SESSION['admin'] = $username;
-            echo "<script>alert('welcome admin!')</script>";
-            echo "<script>location.href = '/smit/admin-panel.php';</script>";
-        } else {
-            $sel = "select * from tbl_register where username = '$username' AND password = '$password' ";
-            $res = mysqli_query($con, $sel);
-
-            if (mysqli_num_rows($res)) {
-                $_SESSION['logged_in'] = true;
-                $_SESSION['username'] = $username;
-                echo "<script>alert('welcome $username!')</script>";
-                echo "<script>location.href = '/smit/home.php';</script>";
-            } else {
-                echo "<script>alert('Invalid username or password!!!')</script>";
-            }
-        }
+        login($pdo, $username, $password);
     }
-}
-
-?>
-<?php
-if (isset($_POST['submit'])) {
-    // $_SESSION['uname'] = $_POST['username'];
 }
 ?>
 

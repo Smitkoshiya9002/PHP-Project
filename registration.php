@@ -1,6 +1,6 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "optical");
+include 'Backend/db.php';
 ?>
 
 <!DOCTYPE html>
@@ -166,135 +166,8 @@ $con = mysqli_connect("localhost", "root", "root", "optical");
 
     <?php
 
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use PHPMailer\PHPMailer\Exception;
-
-
-    require('PHPMailer.php');
-    require('Exception.php');
-    require('SMTP.php');
-
     if (isset($_POST['submit'])) {
-        function input_data($data)
-        {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-        $name = $_POST['name'];
-        $query = "select * from `tbl_register` where `username` = '$name'";
-
-        $result = mysqli_query($con, $query);
-
-        if (mysqli_num_rows($result) > 0) {
-            echo "<script> alert('use diifernt name !') </script>";
-            echo "<script> location.href = 'registration.php'; </script>";
-        }
-
-        //name validation
-        if (empty($_POST["name"])) {
-            echo "<script> alert('name required !') </script>";
-            echo "<script> location.href = 'registration.php'; </script>";
-        } else {
-            $name = input_data($_POST["name"]);
-            if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
-                echo "<script> alert('only alphabet allowed!') </script>";
-                echo "<script> location.href = 'registration.php'; </script>";
-            }
-        }
-
-        //Email Validation   
-        if (empty($_POST["email"])) {
-            echo "<script> alert('email reuired!') </script>";
-            echo "<script> location.href = 'registration.php'; </script>";
-        } else {
-            $email = input_data($_POST["email"]);
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                echo "<script> alert('wrong format !') </script>";
-                echo "<script> location.href = 'registration.php'; </script>";
-            }
-        }
-
-        // Validate password strength
-        $password = $_POST['password'];
-        $uppercase = preg_match('@[A-Z]@', $password);
-        $lowercase = preg_match('@[a-z]@', $password);
-        $number    = preg_match('@[0-9]@', $password);
-        $specialChars = preg_match('@[^\w]@', $password);
-
-        if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 7) {
-            echo "<script> alert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.')</script>";
-            echo "<script> location.href = 'registration.php'; </script>";
-        }
-
-        $_SESSION['uname'] = $_POST['name'];
-        $_SESSION['email'] = $_POST['email'];
-        $_SESSION['password'] = $_POST['password'];
-        $_SESSION['confirm_pass'] = $_POST['cpassword'];
-
-        if ($password == $_POST['cpassword']) {
-            $password = $_POST['password'];
-            $uppercase = preg_match('@[A-Z]@', $password);
-            $lowercase = preg_match('@[a-z]@', $password);
-            $number    = preg_match('@[0-9]@', $password);
-            $specialChars = preg_match('@[^\w]@', $password);
-
-            if (!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 7) {
-                echo "<script> alert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.')</script>";
-                echo "<script> location.href = 'registration.php'; </script>";
-            } else {
-                $email = $_POST['email'];
-                $query = "SELECT * FROM `tbl_register` WHERE `email`='$email'";
-                $result = mysqli_query($con, $query);
-                $numrows = mysqli_num_rows($result);
-                if ($numrows != 0) {
-                    echo "<script> alert('Alredy Used !') </script>";
-                } else {
-                    $otp = rand(1000, 9999);
-                    $_SESSION['otp'] = $otp;
-                    $to = $_POST["email"];
-                    //Create an instance; passing `true` enables exceptions
-                    $mail = new PHPMailer(true);
-
-                    try {
-
-                        $mail->isSMTP(); //Send using SMTP
-
-                        $mail->SMTPAuth = true; //Enable SMTP authentication
-                        $mail->Host = 'smtp.gmail.com';
-                        $mail->Username = 'visionshop02062@gmail.com'; // enter your mail address
-                        $mail->Password = 'xjkxebfavwikhleq';   // enter your email password
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                        $mail->Port = 465; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-                        //Recipients
-                        $mail->setFrom('visionshop02062@gmail.com', 'Registration-Vision');
-
-                        $mail->addAddress($to);
-
-
-                        //Content
-                        $mail->isHTML(true); //Set email format to HTML
-                        $mail->Subject = 'Clear Your Vision';
-                        $mail->Body = 'otp is ' . $otp;
-                        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-                        $mail->send();
-                        echo "<script> alert('otp sent successfully!'); </script>";
-                    } catch (Exception $e) {
-                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                        echo "<script> alert('Wrong Otp Please Fill up Detailes again !'); </script>";
-                    }
-
-                    echo "<script> location.href = 'otp.php'; </script>";
-                }
-            }
-        } else {
-            echo "<script> alert('Please Enter same password') </script>";
-        }
+        Registration($pdo);
     }
     ?>
 

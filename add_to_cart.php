@@ -12,10 +12,10 @@ if (isset($_SESSION['username'])) {
 
         // $insert = "INSERT INTO `tbl_add_to_cart`(`product_id`) VALUES ('$productid')";
         $customer_name = $_SESSION['username'];
-        $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid' where `customer_name` = $customer_name";
+        $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid' and `customer_name` = '$customer_name'";
         $result = mysqli_query($con, $query);
 
-        if (mysqli_num_rows($result) == 0) {
+        if (mysqli_num_rows($result) === 0) {
             $insert = "INSERT INTO tbl_add_to_cart (product_name, product_prize, product_photo, product_company, product_size, product_category, product_id, customer_name, product_quantity, total_prize)
                        SELECT product_name, prize, photo, company, size, category, product_id, '$customer_name', 1, prize
                        FROM tbl_category_product WHERE product_id = '$productid'";
