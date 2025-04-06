@@ -1,46 +1,7 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "optical");
-
 ?>
 
-<?php
-
-if (isset($_SESSION['username'])) {
-    if (isset($_GET['product_id'])) {
-        $productid = $_GET['product_id'];
-
-        // $insert = "INSERT INTO `tbl_add_to_cart`(`product_id`) VALUES ('$productid')";
-        $customer_name = $_SESSION['username'];
-        $query = "select * from `tbl_add_to_cart` where `product_id` = '$productid' and `customer_name` = '$customer_name'";
-        $result = mysqli_query($con, $query);
-
-        if (mysqli_num_rows($result) === 0) {
-            $insert = "INSERT INTO tbl_add_to_cart (product_name, product_prize, product_photo, product_company, product_size, product_category, product_id, customer_name, product_quantity, total_prize)
-                       SELECT product_name, prize, photo, company, size, category, product_id, '$customer_name', 1, prize
-                       FROM tbl_category_product WHERE product_id = '$productid'";
-            if (mysqli_query($con, $insert)) {
-                echo '<script>location.href = "add_to_cart.php";</script>';
-            } else {
-                echo '<script>alert("error to insert query");</script>';
-            }
-        } else {
-            echo '<script>alert("this product is already avaliable in ypur cart");</script>';
-            echo '<script>location.href = "add_to_cart.php";</script>';
-        }
-    }
-} else {
-    echo '<script>
-    if(confirm("you want to login!") == true){
-        location.href = "/smit/login.php";
-    }
-    else{
-        location.href = "/smit/home.php";
-    }
-    ;</script>';
-    exit;
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -359,70 +320,34 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-
     <section id="header">
         <?php
         include 'header.php';
         ?>
     </section>
-
-    <!-- <section id="cart_product">
-        <div class="container">
-            <form action="" method="post">
-                <?php
-                $con = mysqli_connect("localhost", "root", "root", "optical");
-                $customer_name = $_SESSION['username'];
-
-                $select = "select * from `tbl_add_to_cart` where `customer_name` = '$customer_name'";
-                $result = mysqli_query($con, $select);
-
-                while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                    <td><?php echo '<img class="img" src="uploads_img/' . $row['product_photo'] . ' "alt="">'; ?></td>
-                    <td>
-                        <span class="product_name"><?php echo $row['product_name'] ?></span>
-                        <span class="product_size"><?php echo $row['product_size'] ?></span>
-                    </td>
-                <?php
-                }
-
-                ?>
-            </form>
-        </div>
-
-    </section> -->
+    <?php
+    if (isset($_GET['product_id'])) {
+        $productid = $_GET['product_id'];
+        AddItemInCart($pdo, $productid);
+    }
+    ?>
 
     <section id="shopping-cart">
         <h1><i class="glyphicon glyphicon-shopping-cart"></i> Shopping Cart</h1>
 
         <div class="all-cart-item">
             <?php
-            $select = "select * from tbl_add_to_cart";
-            $result = mysqli_query($con, $select);
+            $con = mysqli_connect("localhost", "root", "root", "optical");
+            $customer_name = $_SESSION['username'];
 
-            if (mysqli_num_rows($result) == 0) {
-                echo '<h2 class="notfound">Cart is Empty!</h2>';
-            }
-            $select_cart = mysqli_query($con, "select * from `tbl_add_to_cart` where `customer_name`='$customer_name'");
-
+            $CartData = DisplayCartItem($pdo, $customer_name);
 
             $total = 0.0;
             $grand_total = 0.0;
             $total_discount = 0.0;
 
-            while ($row = mysqli_fetch_assoc($select_cart)) {
-                $product_name = $row['product_name']; // Assuming this is how you identify the product
-                $get_product_quantity_query = mysqli_query($con, "SELECT `quantity` FROM `tbl_category_product` WHERE `product_name`='$product_name'");
-                $quantity_row = mysqli_fetch_assoc($get_product_quantity_query);
-                $max_quantity = $quantity_row['quantity'];
-                if ($max_quantity <= 0) {
-                    $query = "delete from `tbl_add_to_cart` where `product_name` = '$row[product_name]'";
-                    if (mysqli_query($con, $query)) {
-                        echo "<script>alert('Remove from cart out of stock item $row[product_name]');</script>";
-                        echo "<script> location.href = 'add_to_cart.php'; </script>";
-                    }
-                }
-
+            foreach ($CartData as $row) {
+                RemoveOutOfStockItemFromCart($pdo, $row);
             ?>
                 <div class="all-product">
                     <div class="products-card">
@@ -482,32 +407,36 @@ if (isset($_SESSION['username'])) {
             $update_id = $_POST['update_qty_id'];
             $update_value = $_POST['update_quantity'];
 
-            $query = "select * from `tbl_add_to_cart` where `cart_id` = '$update_id'";
-            $result = mysqli_query($con, $query);
+            $stmt = $pdo->prepare("SELECT * FROM tbl_add_to_cart WHERE cart_id = :a");
+            $stmt->bindParam(':a', $update_id);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            while ($row = mysqli_fetch_assoc($result)) {
-                $update_qty_query = mysqli_query($con, "update `tbl_add_to_cart` set `product_quantity` = '$update_value', `total_prize` = ('$row[product_prize]' * '$update_value') where `cart_id` = '$update_id'");
-
-                if ($update_qty_query) {
-                    echo "<script> location.href = 'add_to_cart.php'; x</script>";
-                    exit();
-                } else {
-                    echo '<script>alert("error in update query");</script>';
-                };
+            $stmt = $pdo->prepare("update tbl_add_to_cart set product_quantity = :a, total_prize = (:b * :c) where cart_id = :d");
+            $stmt->bindParam(':a', $update_value);
+            $stmt->bindParam(':b', $row['product_prize']);
+            $stmt->bindParam(':c', $update_value);
+            $stmt->bindParam(':d', $update_id);
+            if ($stmt->execute()) {
+                echo "<script> location.href = 'add_to_cart.php'; x</script>";
+                exit();
+            } else {
+                echo '<script>alert("error in update query");</script>';
             }
         };
         ?>
         <!-------------------------------------- Remove Items --------------------------------->
         <?php
         if (isset($_GET['remove'])) {
-
-
             $remove_id = $_GET['remove'];
-            $remove_query = mysqli_query($con, "delete from `tbl_add_to_cart` where `cart_id` = '$remove_id'");
 
-            if ($remove_query) {
-                echo '<script> alert("Remove item from cart!") </script>';
+            $stmt = $pdo->prepare("delete from tbl_add_to_cart where cart_id = :a");
+            $stmt->bindParam(':a', $remove_id);
+            if ($stmt->execute()) {
                 echo "<script> location.href = 'add_to_cart.php'; </script>";
+                exit();
+            } else {
+                echo '<script>alert("error in remove query");</script>';
             }
         }
         ?>

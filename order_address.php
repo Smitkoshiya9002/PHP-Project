@@ -1,6 +1,6 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "optical");
+include '../smit/Backend/db.php';
 $username = $_SESSION['username'];
 ?>
 <!DOCTYPE html>
@@ -10,7 +10,7 @@ $username = $_SESSION['username'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Order Address</title>
     <style>
         .container {
             width: 100%;
@@ -171,10 +171,7 @@ $username = $_SESSION['username'];
 
                     <label class="customername">Details</label><br>
                     <?php
-                    $query = "select * from `tbl_customer_details` where `name` = '$username'";
-                    $result = mysqli_query($con, $query);
-                    $row = mysqli_fetch_assoc($result);
-
+                    $row = OrderAddressData($pdo, $username);
                     if ($row != null) {
                     ?>
                         <input type="text" class="cclass" name="name" placeholder="Name" value="<?php echo $row['name']; ?>">
@@ -211,9 +208,8 @@ $username = $_SESSION['username'];
 
                     <?php
                     $total = $quantity = $count = $discount = $payable_amount = 0;
-                    $query = "select * from `tbl_add_to_cart` where `customer_name` = '$username'";
-                    $result = mysqli_query($con, $query);
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    $SideData = DisplayCartItem($pdo, $username);
+                    foreach ($SideData as $row) {
                         $count += 1;
                         $total += $row['total_prize'];
                         $quantity += $row['product_quantity'];
@@ -236,95 +232,8 @@ $username = $_SESSION['username'];
     </div>
     <?php
     if (isset($_POST['Adresssave'])) {
-        $name = $_POST['name'];  // Sanitize user input
-        $email = $_POST['email'];
-        $contactno = $_POST['contactno'];
-        $address = $_POST['address'];
-        $city = $_POST['city'];
-        $state =  $_POST['state'];
-        $country = $_POST['country'];
-        $order_address = $address . ',' . $city . ',' . $state . ',' . $country;
-
-        $insert = "INSERT INTO `tbl_order`(`amount`, `cust_name`, `cust_email`, `cust_mobile`, `status` ,`place_order`, `order_date` , `order_address` ) VALUES ('$payable_amount','$name','$email','$contactno','incomplete','placed',CURDATE(), '$order_address')";
-
-        if ($result = mysqli_query($con, $insert)) {
-            $order_id = mysqli_insert_id($con);
-            $_GET['orderid'] = $order_id;
-            $_SESSION['order_id'] = $_GET['orderid'];
-        } else {
-            echo "Error: " . mysqli_error($con);
-            exit();
-        }
-
-        $cart = array();
-
-        $selectQuery = "SELECT product_name, product_quantity, product_prize , product_photo , product_company , product_size FROM tbl_add_to_cart";
-        $result = mysqli_query($con, $selectQuery);
-
-        if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $cart[] = array(
-                    'name' => $row['product_name'],
-                    'quantity' => $row['product_quantity'],
-                    'price' => $row['product_prize'],
-                    'photo' => $row['product_photo'],
-                    'company' => $row['product_company'],
-                    'size' => $row['product_size']
-                );
-            }
-        } else {
-            echo "Error: " . mysqli_error($con);
-        }
-
-        foreach ($cart as $product) {
-            $productName = $product['name'];
-            $quantity = $product['quantity'];
-            $price = $product['price'];
-            $photo = $product['photo'];
-            $company = $product['company'];
-            $size = $product['size'];
-
-            while ($quantity <= 0) {
-                echo "<script>alert('Remove from cart out of stock item $productName');</script>";
-                exit();
-                echo '<script>location.href = "add_to_cart.php";</script>';
-            }
-            $insertOrderDetails = "INSERT INTO `tbl_order_details` (`order_id`, `product_name`, `quantity`, `price`, `size` ,`company`, `photo`) VALUES ('$_SESSION[order_id]', '$productName', '$quantity', '$price' , '$size' , '$company' , '$photo')";
-            if (mysqli_query($con, $insertOrderDetails)) {
-                echo "success";
-            } else {
-                echo '<script>alert("Insert error: ' . mysqli_error($con) . '");</script>';
-                exit();
-            }
-        }
-
-        $query = "select * from `tbl_order_details` where `order_id` = '$order_id'";
-        $result = mysqli_query($con, $query);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $minus_quantity = $row['quantity'];
-            $name = $row['product_name'];
-
-            $query = "select * from `tbl_category_product` where `product_name` = '$name'";
-
-            $result1 = mysqli_query($con, $query);
-
-            $row1 = mysqli_fetch_assoc($result1);
-            $original_quantity = $row1['quantity'];
-
-            if ($original_quantity <= 0) {
-                echo "<script>alert('Remove from cart out of stock item $productName');</script>";
-                echo '<script>location.href = "add_to_cart.php";</script>';
-            } else {
-                $update_quantity = $original_quantity - $minus_quantity;
-                $update = "UPDATE `tbl_category_product` SET `quantity`='$update_quantity' WHERE `product_name` ='$name'";
-
-                mysqli_query($con, $update);
-            }
-        }
-        echo '<script>alert("success");</script>';
-
-        echo '<script>location.href = "order_payment.php";</script>';
+        ConfirmOrder($pdo, $payable_amount);
+        UpdateStockAfterOrder($pdo);
     }
     ?>
 </body>

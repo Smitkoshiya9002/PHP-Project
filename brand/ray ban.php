@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -179,10 +180,10 @@ session_start();
             opacity: 0.5;
         }
 
-        .out_stock{
-            opacity: 1;  
+        .out_stock {
+            opacity: 1;
             font-weight: 700;
-            font-size: 18px;    
+            font-size: 18px;
         }
 
         /* blue panel  */
@@ -437,8 +438,6 @@ session_start();
             transform: translateY(0px);
             opacity: 1;
         }
-
-
     </style>
 
 
@@ -459,15 +458,14 @@ session_start();
     </section>
     <!-- ---------------------------------------start section-------------------------------------- -->
     <section id="start">
-        <div class="start">
+        <div class="start ">
             <p class="start1">To start, with ray ban</p>
             <h3 class="start2">ray-ban sunglasses</h3>
             <p class="start3">Iconic sunglasses are a declaration of belonging, style and attitude</p>
         </div>
     </section>
     <!-- --------------------------------------product section-------------------------------------- -->
-    <section id="product" class="reveal">
-
+    <section id="product" class="">
         <?php
         $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where company='ray ban' and category = 'all'";
@@ -487,7 +485,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -527,12 +525,12 @@ session_start();
 
     </section>
     <!-- -----------------------------------ray ban men sunglasses----------------------------------- -->
-    <section id="men" class="reveal">
+    <section id="men" class="">
         <div class="mentitle">
             <h3>men sunglasses</h3>
         </div>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'men' and `company` = 'ray ban'";
         $result = mysqli_query($con, $query);
 
@@ -550,7 +548,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -591,12 +589,12 @@ session_start();
 
     </section>
     <!-- -----------------------------------ray ban women sunglasses----------------------------------- -->
-    <section id="women" class="reveal">
+    <section id="women" class="">
         <div class="womentitle">
             <h3>Women sunglasses</h3>
         </div>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'women' and `company` = 'ray ban'";
         $result = mysqli_query($con, $query);
 
@@ -614,7 +612,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -653,12 +651,12 @@ session_start();
         ?>
     </section>
     <!-- -----------------------------------ray ban kids sunglasses----------------------------------- -->
-    <section id="kids" class="reveal">
+    <section id="kids" class="">
         <div class="kidstitle">
             <h3>Kids sunglasses</h3>
         </div>
         <?php
-        $con = mysqli_connect("localhost", "root", "", "optical");
+        $con = mysqli_connect("localhost", "root", "root", "optical");
         $query = "SELECT * FROM tbl_category_product where `category` = 'kids' and `company` = 'ray ban'";
         $result = mysqli_query($con, $query);
 
@@ -676,7 +674,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';

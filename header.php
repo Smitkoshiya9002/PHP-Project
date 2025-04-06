@@ -155,7 +155,7 @@ include 'Backend/db.php';
             $row = getHeaderData($pdo, "tbl_brand");
 
             foreach ($row as $r) {
-              echo '<li><a href="/smit/brand/' . $r['brand_name'] . '.php">' . $r['brand_name'] . '</a></li>';
+              echo '<li><a href="/smit/brand.php?brand=' . $r['brand_name'] . '">' . $r['brand_name'] . '</a></li>';
             }
             ?>
           </ul>
@@ -165,7 +165,7 @@ include 'Backend/db.php';
             <?php
             $row = getHeaderData($pdo, "tbl_category");
             foreach ($row as $r) {
-              echo '<li><a href="/smit/category.php?category=' . $r['category_name'] . '.php">' . $r['category_name'] . '</a></li>';
+              echo '<li><a href="/smit/category.php?category=' . $r['category_name'] . '">' . $r['category_name'] . '</a></li>';
             }
             ?>
           </ul>

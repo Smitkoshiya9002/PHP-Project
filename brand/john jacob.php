@@ -151,10 +151,10 @@ session_start();
             opacity: 0.5;
         }
 
-        .out_stock{
-            opacity: 1;  
+        .out_stock {
+            opacity: 1;
             font-weight: 700;
-            font-size: 18px;    
+            font-size: 18px;
         }
 
         /* blue panel  */
@@ -389,7 +389,7 @@ session_start();
         }
 
         /* ----------------------not found ----------------------------- */
-        .notfound{
+        .notfound {
             text-align: center;
             text-transform: uppercase;
             font-family: optima;
@@ -423,7 +423,7 @@ session_start();
     <!-- ------------------------------------------image-------------------------------------------- -->
     <section id="intro">
         <div class="photo">
-            <img src="/smit/images/brand-john-jacob.jpg" alt="">
+            <img src="/smit/images/john-jacob.jpg" alt="">
         </div>
     </section>
     <!-- -----------------------------------------start--------------------------------------------- -->
@@ -455,7 +455,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -515,7 +515,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -575,7 +575,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';
@@ -637,7 +637,7 @@ session_start();
 
                 echo '<div class="el-wrapper">';
                 if ($row['quantity'] == 0) {
-                    echo '<span class="no_stock">'; 
+                    echo '<span class="no_stock">';
                 }
                 echo '<div class="box-up">';
                 echo '<img class="img" src="../uploads_img/' . $row['photo'] . ' "alt="">';

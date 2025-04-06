@@ -1,7 +1,6 @@
 <?php
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "optical");
-$username = $_SESSION['username'];
+include '../smit/Backend/db.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +10,7 @@ $username = $_SESSION['username'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Order Payment</title>
     <style>
         .container {
             width: 100%;
@@ -170,15 +169,14 @@ $username = $_SESSION['username'];
                         <span>Cash on delivery</span>
                     </div>
 
-                    <input type="submit" name="Adresssave" value="continue" class="address_save" onclick="getSelectedOption()">
+                    <input type="submit" name="Paymentbtn" value="continue" class="address_save" onclick="getSelectedOption()">
                 </form>
                 <?php
-                if (isset($_POST['Adresssave'])) {
+                if (isset($_POST['Paymentbtn'])) {
                     if (isset($_POST['option'])) {
                         $selectedoption = $_POST['option'];
                         $_SESSION['payment_method'] = $_POST['option'];
                         echo "<script>alert('you select $selectedoption');</script>";
-                        // echo $selectedoption;
 
                         if ($selectedoption == "UPI") {
                             echo '<script>location.href = "razorpay.php";</script>';
@@ -200,41 +198,27 @@ $username = $_SESSION['username'];
 
                     if (isset($_SESSION['order_id'])) {
                         $total = $quantity = $count = $discount = $payable_amount = 0;
-                        $query = "select * from `tbl_order_details` where `order_id` = '$_SESSION[order_id]'";
-                        $result = mysqli_query($con, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
+                        $stmt = $pdo->prepare("select * from `tbl_order_details` where `order_id` = :order_id");
+                        $stmt->bindParam(':order_id', $_SESSION['order_id']);
+                        $stmt->execute();
+                        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($result as $row) {
                             $count += 1;
                             $total += $row['price'] * $row['quantity'];
                             $quantity += $row['quantity'];
                         }
-                        $total = $total;
-                        $discount = $discount;
-                        $payable_amount = $total - $discount;
-
-                    } else {
-                        $total = $quantity = $count = $discount = $payable_amount = 0;
-                        $query = "select * from `tbl_add_to_cart` where `customer_name` = '$username'";
-                        $result = mysqli_query($con, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $count += 1;
-                            $total += $row['total_prize'];
-                            $quantity += $row['product_quantity'];
-                        }
-                        $total = $total + ($count * 200);
+                        $total = $total + ($quantity * 200);
                         $discount = $quantity * 200;
                         $payable_amount = $total - $discount;
-                    ?>
-                        
-                    <?php
                     }
                     ?>
                     <div class="sidebillform">
-                            <p class="sidebill">total product : <span class="sidebill_amount"><?php echo $count; ?></span></p>
-                            <p class="sidebill">total quantity : <span class="sidebill_amount"><?php echo $quantity; ?></span></p>
-                            <p class="sidebill">total prize : <span class="sidebill_amount"><?php echo $total; ?></span></p>
-                            <p class="sidebill">Bonus Discount : <span class="sidebill_amount"><?php echo $discount; ?></span></p>
-                            <p class="sidebill">total payable amount : <span class="sidebill_amount"><?php echo $payable_amount; ?></span></p>
-                        </div>
+                        <p class="sidebill">total product : <span class="sidebill_amount"><?php echo $count; ?></span></p>
+                        <p class="sidebill">total quantity : <span class="sidebill_amount"><?php echo $quantity; ?></span></p>
+                        <p class="sidebill">total prize : <span class="sidebill_amount"><?php echo $total; ?></span></p>
+                        <p class="sidebill">Bonus Discount : <span class="sidebill_amount"><?php echo $discount; ?></span></p>
+                        <p class="sidebill">total payable amount : <span class="sidebill_amount"><?php echo $payable_amount; ?></span></p>
+                    </div>
                 </center>
             </div>
         </div>
